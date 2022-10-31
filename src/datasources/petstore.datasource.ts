@@ -2,11 +2,28 @@ import {inject, lifeCycleObserver, LifeCycleObserver} from '@loopback/core';
 import {juggler} from '@loopback/repository';
 
 const config = {
-  name: 'fireblocks',
+  name: 'petstore',
   connector: 'openapi',
-  spec: 'https://docs.fireblocks.com/api/v1/swagger',
-  validate: false,
-  positional: false
+  spec: 'http://petstore.swagger.io/v2/swagger.json',
+  validate: true,
+  positional: false,
+  options: {
+    headers: {
+      accept: 'application/json',
+      'content-type': 'application/json',
+    },
+  },
+  operations: [
+    {
+      template: {
+        method: 'GET',
+        url: 'https://petstore.swagger.io/v2/pet/{petId}',
+      },
+      functions: {
+        getPetById: ['petId'],
+      },
+    },
+  ],
 };
 
 // Observe application's life cycle to disconnect the datasource when
@@ -14,13 +31,13 @@ const config = {
 // gracefully. The `stop()` method is inherited from `juggler.DataSource`.
 // Learn more at https://loopback.io/doc/en/lb4/Life-cycle.html
 @lifeCycleObserver('datasource')
-export class FireblocksDataSource extends juggler.DataSource
+export class PetstoreDataSource extends juggler.DataSource
   implements LifeCycleObserver {
-  static dataSourceName = 'fireblocks';
+  static dataSourceName = 'petstore';
   static readonly defaultConfig = config;
 
   constructor(
-    @inject('datasources.config.fireblocks', {optional: true})
+    @inject('datasources.config.petstore', {optional: true})
     dsConfig: object = config,
   ) {
     super(dsConfig);
