@@ -17,7 +17,8 @@ const config = {
     {
       template: {
         method: 'GET',
-        url: 'https://petstore.swagger.io/v2/pet/{petId}',
+        // url: 'https://petstore.swagger.io/v2/pet/{petId}',
+        url: 'https://petstore3.swagger.io/api/v3/pet/{petId}',
       },
       functions: {
         getPetById: ['petId'],
